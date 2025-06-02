@@ -20,12 +20,4 @@
  SOFTWARE.
  */
 
-#include <iostream>
-
-#include "pet.hpp"
-
-Pet::Pet(std::string name) : name(name) {
-  std::cout << "Pet created with name: " << name << std::endl;
-}
-
-Pet::~Pet(void) {}
+#pragma once

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(cpp_template
+project(vui
     VERSION 1.0.0
     LANGUAGES CXX
 )
@@ -39,7 +39,7 @@ file(GLOB_RECURSE SOURCES
 )
 
 # Add the executable target
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_library(${PROJECT_NAME} ${SOURCES})
 
 # Set the target properties
 set_target_properties(${PROJECT_NAME} PROPERTIES

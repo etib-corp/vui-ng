@@ -20,13 +20,4 @@
  SOFTWARE.
  */
 
-#include <gtest/gtest.h>
-
-#include "pet.hpp"
-#include "test_pet.hpp"
-
-TEST(PetTest, DefaultConstructor) {
-  std::string name = "Buddy";
-  Pet pet(name);
-  ASSERT_EQ(pet.getName(), name);
-}
+#pragma once

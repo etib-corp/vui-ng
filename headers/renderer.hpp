@@ -22,38 +22,12 @@
 
 #pragma once
 
-#include <string>
+namespace vui {
 
-/**
- * @class Pet
- * @brief Represents a pet with a name.
- *
- * The Pet class encapsulates the concept of a pet, storing its name and
- * providing basic construction and destruction functionality.
- */
-class Pet {
-
+class Renderer {
 public:
-  /**
-   * @brief Constructs a Pet with the given name.
-   * @param name The name of the pet.
-   */
-  Pet(std::string name);
-
-  /**
-   * @brief Destroys the Pet object.
-   */
-  ~Pet(void);
-
-  /**
-   * @brief Gets the name of the pet.
-   * @return The name of the pet.
-   */
-  std::string getName(void) const { return name; }
-
-private:
-  /**
-   * @brief The name of the pet.
-   */
-  std::string name;
+  Renderer(void);
+  ~Renderer(void);
 };
+
+} // namespace vui
