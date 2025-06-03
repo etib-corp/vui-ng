@@ -6,3 +6,6 @@
 	path = libraries/googletest
 	url = https://github.com/google/googletest
 	tag = v1.17.0
+[submodule "librairies/yaml-cpp"]
+	path = librairies/yaml-cpp
+	url = https://github.com/jbeder/yaml-cpp
