@@ -20,12 +20,45 @@
  SOFTWARE.
  */
 
+#pragma once
+
+#include <string>
+
 #include "component.hpp"
+#include "renderer.hpp"
 
 namespace vui {
 
-void Component::update() {
-    // Base implementation does nothing
-}
+class Text : public Component {
+public:
+  enum class TextAlign { Left, Center, Right, Justify };
+  enum class FontWeight { Normal, Bold, Light };
+
+private:
+  std::string content;
+  TextAlign textAlign = TextAlign::Left;
+  FontWeight fontWeight = FontWeight::Normal;
+
+public:
+  Text(void);
+
+  std::shared_ptr<Component> findById(const std::string &searchId) override {
+    if (getId() == searchId) {
+      return shared_from_this();
+    }
+    return nullptr;
+  }
+
+  const std::string &getContent() const { return content; }
+  void setContent(const std::string &newContent) { content = newContent; }
+  TextAlign getTextAlign() const { return textAlign; }
+  void setTextAlign(TextAlign align) { textAlign = align; }
+  FontWeight getFontWeight() const { return fontWeight; }
+  void setFontWeight(FontWeight weight) { fontWeight = weight; }
+
+  void render(Renderer &renderer) override;
+  void update(void) override;
+  std::string getType() const override { return "Text"; }
+};
 
 } // namespace vui

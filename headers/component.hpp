@@ -22,34 +22,104 @@
 
 #pragma once
 
-#include <vector>
+#include <memory>
+#include <string>
+#include <unordered_map>
+#include <functional>
 
-#include "componentable.hpp"
+// Forward declarations
+namespace vui {
+class Container;
+class Renderer;
+}
 
 namespace vui {
 
-class Component : public Componentable {
+class Component : public std::enable_shared_from_this<Component> {
+public:
 private:
-  bool _visible = true;
-  std::vector<std::shared_ptr<Component>> _children;
+  std::string id;
+  std::string className;
+  std::unordered_map<std::string, std::string> props;
+  std::unordered_map<std::string, std::string> style;
+  std::unordered_map<std::string, std::function<void()>> eventHandlers;
+  std::unordered_map<std::string, std::string> state;
+  std::shared_ptr<Container> parent;
 
 public:
-  virtual ~Component(void);
-  virtual void render(std::shared_ptr<Renderer> renderer) = 0;
-  virtual void update(float deltaTime) = 0;
+  Component() = default;
+  virtual ~Component() = default;
 
-  bool is_visible(void) const { return _visible; }
+  // Identification methods
+  const std::string &getId() const { return id; }
+  void setId(const std::string &newId) { id = newId; }
+  const std::string &getClassName() const { return className; }
+  void setClassName(const std::string &newClassName) {
+    className = newClassName;
+  }
+  virtual std::string getType() const = 0;
 
-  void set_visible(bool visible) { _visible = visible; }
+  // Properties and styles methods
+  void setProperty(const std::string &key, const std::string &value) {
+    props[key] = value;
+  }
 
-  void add_child(std::shared_ptr<Component> child) {
-    if (child) {
-      _children.push_back(child);
+  std::string getProperty(const std::string &key,
+                          const std::string &defaultValue = "") const {
+    auto iterator = props.find(key);
+    return (iterator != props.end()) ? iterator->second : defaultValue;
+  }
+
+  void setStyle(const std::string &key, const std::string &value) {
+    style[key] = value;
+  }
+
+  std::string getStyle(const std::string &key,
+                       const std::string &defaultValue = "") const {
+    auto iterator = style.find(key);
+    return (iterator != style.end()) ? iterator->second : defaultValue;
+  }
+
+  virtual void render(Renderer &renderer) = 0;
+  virtual void update();
+
+  void bindEvent(const std::string &eventType, std::function<void()> handler) {
+    eventHandlers[eventType] = handler;
+  }
+
+  void handleEvent(const std::string &eventType) {
+    auto iterator = eventHandlers.find(eventType);
+    if (iterator != eventHandlers.end()) {
+      iterator->second();
     }
   }
 
-  const std::vector<std::shared_ptr<Component>> &get_children(void) const {
-    return _children;
+  virtual std::shared_ptr<Component> findById(const std::string &searchId) = 0;
+
+  void setState(const std::string &key, const std::string &value) {
+    state[key] = value;
+    onStateChange(key, value);
+  }
+
+  std::string getState(const std::string &key,
+                       const std::string &defaultValue = "") const {
+    auto iterator = state.find(key);
+    return (iterator != state.end()) ? iterator->second : defaultValue;
+  }
+
+  // Tree navigation
+  void setParent(std::shared_ptr<Container> newParent) { parent = newParent; }
+  std::shared_ptr<Container> getParent() const { return parent; }
+
+protected:
+  virtual void onStateChange(const std::string &key, const std::string &value) {
+  }
+
+  const std::unordered_map<std::string, std::string> &getProps() const {
+    return props;
+  }
+  const std::unordered_map<std::string, std::string> &getStyles() const {
+    return style;
   }
 };
 

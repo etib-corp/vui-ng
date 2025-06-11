@@ -22,23 +22,54 @@
 
 #pragma once
 
+#include <functional>
 #include <memory>
+#include <string>
+#include <unordered_map>
 
+#include "component.hpp"
 #include "renderer.hpp"
-#include "componentable.hpp"
+#include "state_manager.hpp"
 
 namespace vui {
 
 class Interface {
 private:
-    std::shared_ptr<Renderer> _renderer;
-    std::unique_ptr<Componentable> _root_component;
-    
+  std::shared_ptr<Component> rootComponent;
+  std::unique_ptr<Renderer> renderer;
+  std::unique_ptr<StateManager> stateManager;
+
+  mutable std::unordered_map<std::string, std::shared_ptr<Component>>
+      componentCache;
+
+  void clearComponentCache(void);
+  void rebuildInterface(void);
+
 public:
-  Interface(std::shared_ptr<Renderer> renderer);
-  ~Interface(void);
+  Interface(std::unique_ptr<Renderer> renderer)
+      : renderer(std::move(renderer)) {}
+  ~Interface(void) = default;
+
   void render(void);
-  void update(float delta_time);
+  void update(void);
+
+  std::shared_ptr<Component> findComponent(const std::string &id) const;
+  void bindEvent(const std::string &componentId, const std::string &eventType,
+                 std::function<void()> handler);
+
+  void setState(const std::string &key, const std::string &value);
+  std::string getState(const std::string &key,
+                       const std::string &defaultValue = "") const;
+
+  void observeState(
+      const std::string &key,
+      std::function<void(const std::string &, const std::string &)> handler);
+
+  void setRenderer(std::unique_ptr<Renderer> newRenderer);
+  Renderer *getRenderer() const { return renderer.get(); }
+
+  void initialize();
+  void cleanup();
 };
 
 } // namespace vui

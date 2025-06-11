@@ -22,26 +22,46 @@
 
 #pragma once
 
+#include <functional>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
 namespace vui {
 
-class Renderer {
+class StateManager {
+private:
+  std::unordered_map<std::string, std::string> globalState;
+
+private:
+  std::unordered_map<std::string,
+                     std::vector<std::function<void(const std::string &,
+                                                    const std::string &)>>>
+      observers;
+
+  void notifyObservers(const std::string &key, const std::string &value);
 
 public:
-  virtual ~Renderer(void) = default;
+  StateManager(void) = default;
+  ~StateManager(void) = default;
 
-  virtual void beginRender(void) = 0;
-  virtual void endRender(void) = 0;
+  void setState(const std::string &key, const std::string &value) {
+    globalState[key] = value;
+  }
 
-  virtual void pushTransform(float x, float y, float scaleX = 1.0f,
-                             float scaleY = 1.0f) = 0;
-  virtual void popTransform(void) = 0;
-  virtual void setClipRect(float x, float y, float width, float height) = 0;
-  virtual void clearClipRect(void) = 0;
+  std::string getState(const std::string &key,
+                       const std::string &defaultValue = "") const {
+    auto iterator = globalState.find(key);
+    return (iterator != globalState.end()) ? iterator->second : defaultValue;
+  }
 
-  virtual void setOpacity(float opacity) = 0;
-  virtual float getOpacity(void) const = 0;
-  virtual void setVisible(bool visible) = 0;
-  virtual bool isVisible(void) const = 0;
+  void addStateObserver(
+      const std::string &key,
+      std::function<void(const std::string &, const std::string &)> handler) {
+    observers[key].push_back(handler);
+  }
+
+  void removeStateObserver(const std::string &key) { observers.erase(key); }
 };
 
 } // namespace vui

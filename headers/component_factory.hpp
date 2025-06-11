@@ -20,4 +20,31 @@
  SOFTWARE.
  */
 
-#include "componentable.hpp"
+#pragma once
+
+#include <functional>
+#include <memory>
+#include <string>
+#include <unordered_map>
+
+#include "component.hpp"
+
+namespace vui {
+
+class ComponentFactory {
+
+private:
+  static std::unordered_map<std::string,
+                            std::function<std::shared_ptr<Component>()>>
+      creators;
+  static void initializeDefaultComponents(void);
+  static bool initialized;
+
+public:
+  static std::shared_ptr<Component> create(const std::string &type);
+  static void
+  registerComponent(const std::string &type,
+                    std::function<std::shared_ptr<Component>()> createFn);
+};
+
+} // namespace vui

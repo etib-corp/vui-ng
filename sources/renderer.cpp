@@ -21,7 +21,3 @@
  */
 
 #include "renderer.hpp"
-
-vui::Renderer::Renderer(void) {}
-
-vui::Renderer::~Renderer(void) {}

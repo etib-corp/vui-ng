@@ -20,8 +20,40 @@
  SOFTWARE.
  */
 
-#include <gtest/gtest.h>
+#pragma once
 
-#include "componentable.hpp"
+#include <memory>
 
-#include "test_componentable.hpp"
+#include "interface.hpp"
+#include "renderer.hpp"
+
+namespace vui {
+
+class Application {
+private:
+  std::unique_ptr<Interface> interface;
+  bool running = false;
+
+  void mainLoop(void);
+
+protected:
+  virtual void onInitialize(void);
+  virtual void onUpdate(void);
+  virtual void onRender(void);
+  virtual void onShutdown(void);
+
+public:
+  Application(void);
+  virtual ~Application(void) = default;
+
+  virtual void configure(void);
+  virtual void setupEventHandlers(void);
+
+  bool initialize(std::unique_ptr<Renderer> renderer);
+  void run(void);
+  void stop(void);
+
+  Interface *getInterface(void) const { return interface.get(); }
+};
+
+} // namespace vui

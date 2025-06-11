@@ -20,12 +20,4 @@
  SOFTWARE.
  */
 
-#include "component.hpp"
-
-namespace vui {
-
-void Component::update() {
-    // Base implementation does nothing
-}
-
-} // namespace vui
+#include "renderers/graphical_renderer.hpp"

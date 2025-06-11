@@ -22,17 +22,43 @@
 
 #pragma once
 
-#include <memory>
+#include <string>
+#include <functional>
 
+#include "component.hpp"
 #include "renderer.hpp"
 
 namespace vui {
 
-class Componentable {
+class Button : public Component {
+private:
+  std::string text;
+  bool enabled = true;
+
+protected:
+  void onStateChange(const std::string &key, const std::string &value) override;
+
 public:
-  virtual ~Componentable(void) = default;
-  virtual void render(std::shared_ptr<Renderer> renderer) = 0;
-  virtual void update(float delta_time) = 0;
+  Button(void);
+
+  std::shared_ptr<Component> findById(const std::string &searchId) override {
+    if (getId() == searchId) {
+      return shared_from_this();
+    }
+    return nullptr;
+  }
+
+  const std::string &getText() const { return text; }
+  void setText(const std::string &newText) { text = newText; }
+  bool isEnabled() const { return enabled; }
+  void setEnabled(bool newEnabled) { enabled = newEnabled; }
+
+  void render(Renderer &renderer) override;
+  void update(void) override;
+
+  std::string getType() const override { return "Button"; }
+
+  void onClick(std::function<void()> handler) { bindEvent("click", handler); }
 };
 
 } // namespace vui

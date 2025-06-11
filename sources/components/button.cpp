@@ -20,12 +20,13 @@
  SOFTWARE.
  */
 
-#include "component.hpp"
+#include "components/button.hpp"
 
-namespace vui {
+vui::Button::Button(void) {}
 
-void Component::update() {
-    // Base implementation does nothing
-}
+void vui::Button::onStateChange(const std::string &key,
+                                const std::string &value) {}
 
-} // namespace vui
+void vui::Button::render(Renderer &renderer) {}
+
+void vui::Button::update(void) {}

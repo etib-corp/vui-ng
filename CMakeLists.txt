@@ -63,6 +63,10 @@ foreach(LIBRARY_DIR ${LIBRARIES_DIR})
     endif()
 endforeach()
 
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    yaml-cpp
+)
+
 # Add the tests
 enable_testing()
 add_subdirectory(${TESTS_DIR})

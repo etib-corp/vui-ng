@@ -20,12 +20,21 @@
  SOFTWARE.
  */
 
-#include "component.hpp"
+#pragma once
+
+#include "renderer.hpp"
 
 namespace vui {
 
-void Component::update() {
-    // Base implementation does nothing
-}
+namespace queue_renderer {
+
+class QueueRenderer : public Renderer {
+
+public:
+  QueueRenderer(void);
+  ~QueueRenderer(void);
+};
+
+} // namespace queue_renderer
 
 } // namespace vui

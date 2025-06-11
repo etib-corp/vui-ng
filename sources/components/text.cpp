@@ -20,4 +20,11 @@
  SOFTWARE.
  */
 
-#pragma once
+#include "components/text.hpp"
+
+vui::Text::Text(void) {}
+
+void vui::Text::render(Renderer &renderer) { }
+
+void vui::Text::update(void) {
+}

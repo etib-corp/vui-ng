@@ -21,20 +21,3 @@
  */
 
 #include "interface.hpp"
-
-vui::Interface::Interface(std::shared_ptr<Renderer> renderer)
-    : _renderer(std::move(renderer)) {}
-
-vui::Interface::~Interface(void) {}
-
-void vui::Interface::render(void) {
-  if (_renderer) {
-    _root_component->render(_renderer);
-  }
-}
-
-void vui::Interface::update(float delta_time) {
-  if (_root_component) {
-    _root_component->update(delta_time);
-  }
-}

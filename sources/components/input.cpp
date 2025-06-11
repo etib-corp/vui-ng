@@ -20,12 +20,10 @@
  SOFTWARE.
  */
 
-#include "component.hpp"
+#include "components/input.hpp"
 
-namespace vui {
+vui::Input::Input(void) {}
 
-void Component::update() {
-    // Base implementation does nothing
-}
+void vui::Input::render(Renderer &renderer) {}
 
-} // namespace vui
+void vui::Input::update(void) {}

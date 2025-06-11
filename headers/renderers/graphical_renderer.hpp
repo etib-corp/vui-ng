@@ -20,12 +20,21 @@
  SOFTWARE.
  */
 
-#include "component.hpp"
+#pragma once
+
+#include "renderer.hpp"
 
 namespace vui {
 
-void Component::update() {
-    // Base implementation does nothing
-}
+namespace graphical_renderer {
+
+class GraphicalRenderer : public Renderer {
+
+public:
+  GraphicalRenderer(void);
+  ~GraphicalRenderer(void);
+};
+
+} // namespace graphical_renderer
 
 } // namespace vui
