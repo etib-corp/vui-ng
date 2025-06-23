@@ -44,4 +44,5 @@ public:
   virtual bool isVisible(void) const = 0;
 };
 
+
 } // namespace vui
